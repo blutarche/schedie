@@ -8,7 +8,6 @@
     <meta property="og:image" content="http://aikdanai.com/images/doge.jpg">
     <meta property="og:description" content='Natural language friendly scheduler.'>
     <meta property="fb:app_id" content="1599827023662719">
-
     <meta name="msapplication-tap-highlight" content="no">
     <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
@@ -21,23 +20,46 @@
     <meta name="msapplication-TileImage" content="favicons/ms-icon-144x144.png">
     <meta name="msapplication-TileColor" content="#2F3BA2">
     <meta name="theme-color" content="#2F3BA2">
-
     <title>Scheddo</title>
     <!-- Stylesheet -->
+    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
     <link type="text/css" href="flat-ui/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link type="text/css" href="flat-ui/css/font-awesome.min.css" rel="stylesheet">
     <link type="text/css" href="flat-ui/css/flat-ui.min.css" rel="stylesheet">
     <link type="text/css" href="css/core.css" rel="stylesheet"/>
   </head>
   <body>
- 
-    <div class="container" id="app">
+    <div class="container">
       <div class="row">
-        <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 text-center">
-          Here i am.
+        <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 text-center">
+          <br>
+          <h1 class="curly" style="color:#1abc9c;margin-bottom:0px">Schedie</h1>
+          <p class="text-center curly" style="color:#556270">Friendly scheduler</p>
+          <br>
+          <form class="form" id="string">
+            <div class="form-group">
+              <textarea class="form-control input-lg" id="paragraph" rows="10" name="text" form="string" placeholder="Enter string here..." style="resize: vertical;"></textarea>
+            </div>
+            <div class="form-group">
+              <div class="btn btn-embossed btn-lg btn-primary" onclick="senddata();" id="submitbtn">
+                Submit
+              </div>
+            </div>
+          </form>
         </div>
       </div>
-
+      <div class="row">
+        <div class="col-xs-12 text-center">
+          <br>
+          <p style="color:#ccc">_______________</p>
+          <br>
+          <p style="font-size:.8em; color:#aaa">
+            Created by Aikdanai Sidhikosol &#8729; Kanitkorn Sujautra &#8729; Potchara Pheungthonglor<br>
+            Natural Language Processing
+          </p>
+        </div>
+        <br>
+      </div>
     </div>
     
     <script type="text/javascript" src="bundle.js" charset="utf-8"></script>
