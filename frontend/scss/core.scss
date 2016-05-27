@@ -1,0 +1,98 @@
+@charset "UTF-8";
+
+@import "variables";
+@import "mixins";
+
+html, body {
+    background-color: $bg-color;
+    font-size: 18px;
+}
+
+.header {
+    margin-bottom: 30px;
+}
+
+.btn {
+    font-size: 2em;
+}
+
+
+.btn-super-hg {
+    font-size: 2em;
+    padding: 20px 30px;
+}
+
+.btn.upload {
+    position: relative;
+    overflow: hidden;
+
+    input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom : 0;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+}
+
+canvas {
+    background-color: $canvas-bg-color; 
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+}
+
+.control-label {
+    font-size: 2em;
+    line-height: 2em;
+    text-align: right;
+}
+
+.form-group {
+    margin-top: 15px;
+}
+
+.splitter {
+    color: $gray-color;
+}
+
+.footer {
+    margin-bottom: 50px;
+    .fa {
+        @include transition(.2s);
+        color: $fa-color;
+        cursor: pointer;
+    }
+    .fa:hover {
+        color: $fa-hover-color;
+    }
+    .viewers {
+        font-size: 18px;
+    }
+    .description {
+        font-size: 15px;
+        color: $footer-color;
+        a {
+            @include transition(.2s);
+            color: $footer-link-color;
+            border-bottom: 1px dotted $footer-link-color;
+            cursor: pointer;
+        }
+        a:hover {
+            color: $footer-link-color-hover;
+            border-bottom: 1px solid $footer-link-color-hover;
+        }
+    }
+
+}
+
+.tip {
+    font-size: 1.5em;
+    color: $footer-color;
+    margin-bottom: 2px;
+}

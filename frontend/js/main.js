@@ -1,0 +1,3 @@
+function dafuq() {
+    alert("Welcome!");
+}
