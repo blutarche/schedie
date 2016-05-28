@@ -9,7 +9,7 @@ const corenlp = {
   'host': 'corenlp.run',
   'properties': {
     "tokenize.whitespace": "true",
-    "annotators": "tokenize, ssplit, pos, ner",
+    "annotators": "ner",
     "outputFormat": "json"
   }
 }
@@ -23,7 +23,7 @@ app.get('/', function (req, res) {
 })
 
 app.post('/', function (req, res) {
-  exec(`wget --post-data '${req.body.data}' '${corenlp.host}/?properties=${JSON.stringify(corenlp.preperties)}' -O -`, function (err, stdout) {
+  exec(`wget --post-data '${req.body.data}' '${corenlp.host}/?properties=${JSON.stringify(corenlp.properties)}' -O -`, function (err, stdout) {
     if (err) {
       res.status(300).send('Error')
     } else {
