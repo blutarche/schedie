@@ -1,10 +1,10 @@
-function senddata() { 
+function senddata() {
     var str = formatString($('#paragraph').val());
     var jsondata = JSON.stringify({ "data": str });
     console.log(jsondata);
     $.ajax({
         type: "POST",
-        url: "test.php",
+        url: "/",
         data: jsondata,
         contentType: 'application/json',
         cache: false,
@@ -63,6 +63,6 @@ function renderResult(data) {
     //         "</a>"+
     //         "</td>";
     //     $('#results').append("<tr>"+divText+"\n"+divName+"</tr>");
-    // }    
+    // }
 
 }
