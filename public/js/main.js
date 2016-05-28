@@ -43,11 +43,11 @@ function btnReady() {
     $('#submitbtn').attr("disabled", false);
 }
 
-function renderResult(json) {
+function renderResult(data) {
     // json = JSON.parse(json);
     btnReady();
     $('#results-wrapper').removeAttr("hidden");
-    $('#results').html(JSON.stringify(json));
+    $('#results').html(data);
     // $('#results').html('<tr><th>String</th><th>Document\'s name</th></tr>');
     // for (var i in json.results) {
     //     var result = json.results[i];
