@@ -1,6 +1,6 @@
 {
   "name": "Schedie",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Natural Language friendly scheduler!",
   "main": "index.js",
   "scripts": {
