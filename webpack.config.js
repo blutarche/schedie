@@ -1,9 +1,10 @@
 module.exports = {
 //    context: __dirname + "/app",
-    entry: "./js/main.js",
+    entry: "./assets/js/main",
     output: {
+        // filename: "[name]-[hash].js",
         filename: "bundle.js",
-	    path: __dirname
+	    path: __dirname + '/assets/bundles/'
 	},
 	module: {
 	  loaders: [
