@@ -1,11 +1,18 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path')
-const fs = require('fs')
 const exec = require('child_process').exec
 
 const app = express()
 const port = process.env.PORT || 3000
+const corenlp = {
+  'host': 'corenlp.run',
+  'properties': {
+    "tokenize.whitespace": "true",
+    "annotators": "tokenize, ssplit, pos, ner",
+    "outputFormat": "json"
+  }
+}
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -16,26 +23,11 @@ app.get('/', function (req, res) {
 })
 
 app.post('/', function (req, res) {
-  const timestamp = new Date().valueOf()
-  const data = req.body.data
-
-  fs.writeFile(`data/data_${timestamp}`, data, function (err) {
+  exec(`wget --post-data '${req.body.data}' '${corenlp.host}/?properties=${JSON.stringify(corenlp.preperties)}' -O -`, function (err, stdout) {
     if (err) {
       res.status(300).send('Error')
     } else {
-      exec(`./corenlp/corenlp.sh -annotators tokenize,ssplit,pos,lemma,ner -outputFormat text -file data/data_${timestamp}`, function (err) {
-        if (err) {
-          res.status(300).send('Error')
-        } else {
-          fs.readFile(`data_${timestamp}.out`, 'utf8', function (err, results) {
-            if (err) {
-              res.status(300).send('Error')
-            } else {
-              res.status(200).send(results)
-            }
-          })
-        }
-      })
+      res.status(200).send(stdout)
     }
   })
 })
