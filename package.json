@@ -1,10 +1,13 @@
 {
-  "name": "scheddo",
+  "name": "schedie",
   "version": "0.0.1",
   "description": "Natural Language friendly scheduler!",
   "main": "main.js",
   "scripts": {
     "start": "./node_modules/.bin/webpack-dev-server --inline --hot --port 3000",
+    "build": "./node_modules/.bin/webpack --inline --hot",
+    "build-2": "./node_modules/.bin/webpack --config webpack.config.js",
+    "watch": "./node_modules/.bin/webpack --config webpack.config.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {
@@ -21,10 +24,10 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://github.com/blutarche/scheddo.git"
+    "url": "https://github.com/blutarche/schedie.git"
   },
   "keywords": [
-    "scheddo"
+    "schedie"
   ],
   "dependencies": {
     "webpack": "^1.13.1",
