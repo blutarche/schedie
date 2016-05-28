@@ -1,0 +1,35 @@
+{
+  "name": "scheddo",
+  "version": "0.0.1",
+  "description": "Natural Language friendly scheduler!",
+  "main": "main.js",
+  "scripts": {
+    "start": "./node_modules/.bin/webpack-dev-server --inline --hot --port 3000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Aikdanai Sidhikosol"
+  },
+  "contributors": [
+    {
+      "name": "Potchara Pheungthonglor"
+    },
+    {
+      "name": "Kanitkorn Sujautra"
+    }
+  ],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blutarche/scheddo.git"
+  },
+  "keywords": [
+    "scheddo"
+  ],
+  "dependencies": {
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1",
+    "babel-core": "^6.4.5",
+    "babel-loader": "^6.2.1"
+  }
+}
