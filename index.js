@@ -44,6 +44,7 @@ app.post('/', function (req, res) {
       let locationTokens = []
       tokens.forEach(function (token, index) {
         if (isNERDateTime(token)) {
+          locationState = false
           if (index === 0 || isNERDateTime(tokens[index - 1]) || tokens[index - 1].pos.includes('NN')) {
             startDateTimeTokens.push(token)
           } else if (tokens[index - 1].pos === 'IN') {
@@ -56,9 +57,15 @@ app.post('/', function (req, res) {
         } else if (token.ner === 'LOCATION' || token.ner === 'ORGANIZATION' && index !== 0) {
           if (tokens[index - 1].pos === 'IN') {
             titleTokens.pop()
+            locationTokens.push(token)
+            locationState = true
+          } else if (locationState) {
+            locationTokens.push(token)
+          } else {
+            titleTokens.push(token)
           }
-          locationTokens.push(token)
         } else {
+          locationState = false
           titleTokens.push(token)
         }
       })
