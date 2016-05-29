@@ -53,7 +53,7 @@ app.post('/', function (req, res) {
           } else {
             titleTokens.push(token)
           }
-        } else if (token.ner === 'LOCATION' || token.ner === 'ORGANIZATION') {
+        } else if (token.ner === 'LOCATION' || token.ner === 'ORGANIZATION' && index !== 0) {
           if (tokens[index - 1].pos === 'IN') {
             titleTokens.pop()
           }
