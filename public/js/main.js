@@ -172,7 +172,24 @@ function dayOffset(date) {
         console.log(dayFormat(nextX));
         return dayFormat(nextX);
     }
-    return date;
+    var offsetTest = new RegExp("OFFSET P-[0-9]*D");
+    if (offsetTest.test(date)) {
+        var offset = /OFFSET P-([0-9]*)D/g;
+        var match = offset.exec(date);
+        var fromNow = match;
+        console.log("date from now: "+fromNow);
+        var today = new Date();
+        var nextX = new Date();
+        nextX.setDate(today.getDate()-(+fromNow[1]));
+        console.log(dayFormat(nextX));
+        return dayFormat(nextX);
+    }
+    var offsetTest = new RegExp("THIS P[0-9]*D");
+    if (offsetTest.test(date)) {
+        var today = new Date();
+        return dayFormat(today);
+    }
+    return date
 }
 
 function weekOffset(date) {
