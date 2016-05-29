@@ -66,7 +66,7 @@ function renderResult(data) {
 function renderLocation(location) {
     $('#results').append('<div class=\"col-sm-4\"><b>Location</b></div>');
     $('#results').append('<div class=\"col-sm-8\">'+location+'</div>');
-    $('#results').append('<div class=\"col-sm-12 text-center\"><iframe src=\"https://www.google.com/maps/embed/v1/search?key=AIzaSyApwYjqfr7GJKSgO1Jdcf8kjV4N8WM2Y48&q='+encodeURI(location)+'\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" allowfullscreen></iframe></div>');
+    $('#results').append('<div class=\"col-sm-12 text-center    \"><iframe src=\"https://www.google.com/maps/embed/v1/search?key=AIzaSyApwYjqfr7GJKSgO1Jdcf8kjV4N8WM2Y48&q='+encodeURI(location)+'\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" allowfullscreen></iframe></div>');
 }
 
 function renderComponents(jsondate, jsontime, strdate, strtime) {
@@ -74,7 +74,9 @@ function renderComponents(jsondate, jsontime, strdate, strtime) {
     // DATE
     if (jsondate == '') {
         date = getToday();
-        date = dateProcess(jsontime);
+        if (dateProcess(jsontime) != jsontime) {
+            date = dateProcess(jsontime);
+        }
     }
     else {
         date = dateProcess(jsondate);   
