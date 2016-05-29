@@ -29,8 +29,8 @@ app.post('/', function (req, res) {
     if (err) {
       res.status(300).send('Error')
     } else {
-      const output = JSON.parse(stdout)
-      const tokens = output.sentences[0].tokens.map(function (token) {
+      const corenlpResult = JSON.parse(stdout)
+      const tokens = corenlpResult.sentences[0].tokens.map(function (token) {
         return {
           word: token.word,
           pos: token.pos,
@@ -38,24 +38,39 @@ app.post('/', function (req, res) {
           normalizedNER: token.normalizedNER
         }
       })
-      let title = []
-      let time = []
+      let titleTokens = []
+      let dateTimeTokens = []
       tokens.forEach(function (token, index) {
         if (isNERDateTime(token)) {
           if (index === 0 || isNERDateTime(tokens[index - 1])) {
-            time.push(token)
+            dateTimeTokens.push(token)
           } else if (tokens[index - 1].pos === 'IN' || tokens[index - 1].pos === ':') {
-            time.push(title.pop(), token)
+            dateTimeTokens.push(titleTokens.pop(), token)
           } else {
-            title.push(token)
+            titleTokens.push(token)
           }
         } else {
-          title.push(token)
+          titleTokens.push(token)
         }
       })
-      console.log(`Title: ${title}`)
-      console.log(`Time: ${time}`)
-      res.status(200).send(JSON.stringify(tokens))
+      const result = {}
+      result.title = titleTokens.map((token) => token.word).join(" ")
+      const resultDateTime = Array.from(new Set(dateTimeTokens
+        .filter((token) => token.normalizedNER !== undefined)
+        .map((token) => token.normalizedNER))
+      )
+      resultDateTime.forEach(function(dateTime) {
+        if (dateTime[0] === 'T' && dateTime[3] === ':') {
+          result.time = dateTime.substring()
+        } else if (dateTime[dateTime.length - 6] === 'T'){
+          result.date = dateTime.substring(0, dateTime.length - 6)
+          result.time = dateTime.substring(dateTime.length - 6)
+        } else {
+          result.date = dateTime
+        }
+      })
+      result.time = result.time.substring(1)
+      res.status(200).send(JSON.stringify(result))
     }
   })
 })
