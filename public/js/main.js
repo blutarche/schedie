@@ -1,6 +1,6 @@
 var calendar ={
     "summary": '',
-    "location": '', 
+    "location": '',
     "start": {
         "dateTime": ''
     },
@@ -101,7 +101,7 @@ function renderComponents(jsondate, jsontime, strdate, strtime, isHaveEnd) {
         }
     }
     else {
-        date = dateProcess(jsondate);   
+        date = dateProcess(jsondate);
     }
     $('#results').append('<div class=\"col-sm-4\"><b>'+strdate+'</b></div>');
     $('#results').append('<div class=\"col-sm-8\">'+date+'</div>');
@@ -114,21 +114,21 @@ function renderComponents(jsondate, jsontime, strdate, strtime, isHaveEnd) {
         $('#results').append('<div class=\"col-sm-8\">'+time+'</div>');
         var dateTime = date+timeFormatForCalendar(time);
         if (strdate=="Date" || strdate=="Start date") {
-            calendar["start"] = {"dateTime": dateTime};
+            calendar["start"] = {"dateTime": dateTime + "+07:00",};
         }
         if (strdate=="End date" || isHaveEnd==0) {
-            calendar["end"] = {"dateTime": dateTime};   
+            calendar["end"] = {"dateTime": dateTime + "+07:00",};
         }
     }
     else {
         if (strdate=="Date" || strdate=="Start date") {
-            calendar["start"] = {"date": date};
+            calendar["start"] = {"date": date,};
         }
         if (strdate=="End date" || isHaveEnd==0)  {
-            calendar["end"] = {"date": date};   
+            calendar["end"] = {"date": date,};
         }
     }
-    return 
+    return
 }
 
 function timeProcess(time) {
@@ -211,6 +211,6 @@ function dayFormat(day) {
 }
 
 function timeFormatForCalendar(time) {
-    var ans = "T"+time+":00Z";
+    var ans = "T"+time+":00";
     return ans;
 }
