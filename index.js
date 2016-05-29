@@ -38,14 +38,17 @@ app.post('/', function (req, res) {
           normalizedNER: token.normalizedNER
         }
       })
-      var titleTokens = []
-      var dateTimeTokens = []
+      let titleTokens = []
+      let startDateTimeTokens = []
+      let endDateTimeTokens = []
       tokens.forEach(function (token, index) {
         if (isNERDateTime(token)) {
-          if (index === 0 || isNERDateTime(tokens[index - 1])) {
-            dateTimeTokens.push(token)
-          } else if (tokens[index - 1].pos === 'IN' || tokens[index - 1].pos === ':') {
-            dateTimeTokens.push(titleTokens.pop(), token)
+          if (index === 0 || isNERDateTime(tokens[index - 1]) || tokens[index - 1].pos.includes('NN')) {
+            startDateTimeTokens.push(token)
+          } else if (tokens[index - 1].pos === 'IN') {
+            startDateTimeTokens.push(titleTokens.pop(), token)
+          } else if (tokens[index - 1].pos === ':' || tokens[index - 1].pos === 'TO') {
+            endDateTimeTokens.push(titleTokens.pop(), token)
           } else {
             titleTokens.push(token)
           }
@@ -53,25 +56,32 @@ app.post('/', function (req, res) {
           titleTokens.push(token)
         }
       })
-      const result = {}
+      const result = {
+        title: "",
+        startdate: "",
+        enddate: "",
+        starttime: "",
+        endtime: ""
+      }
       result.title = titleTokens.map((token) => token.word).join(" ")
-      const resultDateTime = Array.from(new Set(dateTimeTokens
-        .filter((token) => token.normalizedNER !== undefined)
-        .map((token) => token.normalizedNER))
-      )
-      resultDateTime.forEach(function(dateTime) {
-        if (dateTime[0] === 'T' && dateTime[3] === ':') {
-          result.time = dateTime.substring()
-        } else if (dateTime[dateTime.length - 6] === 'T'){
-          result.date = dateTime.substring(0, dateTime.length - 6)
-          result.time = dateTime.substring(dateTime.length - 6)
-        } else {
-          result.date = dateTime
-        }
-      })
-      if (result.time) { result.time.substring(1) }
+      const startDateTime = separateDateTime(startDateTimeTokens)
+      const endDateTime = separateDateTime(endDateTimeTokens)
+      result.startdate = startDateTime.date
+      result.enddate = endDateTime.date
+      result.starttime = startDateTime.time
+      result.endtime = endDateTime.time
+
+      console.log("Tokens")
       console.log(tokens)
+      console.log("Title")
+      console.log(titleTokens)
+      console.log("Start")
+      console.log(startDateTimeTokens)
+      console.log("End")
+      console.log(endDateTimeTokens)
+      console.log("Result")
       console.log(result)
+      
       res.status(200).json(JSON.stringify(result))
     }
   })
@@ -80,6 +90,34 @@ app.post('/', function (req, res) {
 app.listen(port, function () {
   console.log(`Click me if your terminal isn't suck http://localhost:${port}`)
 })
+
+function separateDateTime(dateTimeTokens) {
+  const result = {
+    date: "",
+    time: ""
+  }
+  const resultDateTime = Array.from(new Set(dateTimeTokens
+    .filter((token) => token.normalizedNER !== undefined)
+    .map((token) => token.normalizedNER))
+  )
+  resultDateTime.forEach(function(dateTime) {
+    if (dateTime[0] === 'T' && dateTime[3] === ':') {
+      if (dateTime.length > 6) {
+        const tmpTimeArray = dateTime.split(' ')
+        result.time = tmpTimeArray[0]
+        result.date = `${tmpTimeArray[1]} ${tmpTimeArray[2]}`
+      } else {
+        result.time = dateTime
+      }
+    } else if (dateTime[dateTime.length - 6] === 'T' && dateTime[dateTime.length - 3] === ':'){
+      result.date = dateTime.substring(0, dateTime.length - 6)
+      result.time = dateTime.substring(dateTime.length - 6)
+    } else {
+      result.date = dateTime
+    }
+  })
+  return result
+}
 
 function isNERDateTime(token) {
   return token.ner === 'DATE' || token.ner === 'TIME'
