@@ -1,3 +1,22 @@
+var calendar ={
+    "summary": '',
+    "location": '', 
+    "start": {
+        "dateTime": ''
+    },
+    "end": {
+        "dateTime": ''
+    },
+  'reminders': {
+    'useDefault': false,
+    'overrides': [
+      {'method': 'email', 'minutes': 24 * 60},
+      {'method': 'popup', 'minutes': 10}
+    ]
+  }
+};
+
+
 function senddata() {
     var str = formatString($('#paragraph').val());
     var jsondata = JSON.stringify({ "data": str });
@@ -41,26 +60,29 @@ function btnReady() {
 }
 
 function renderResult(data) {
+    calendar["summary"] = '';
+    calendar["start"] = {};
+    calendar["end"] = {};
+    calendar["location"] = '';
+
     var json = JSON.parse(data);
     console.log(json);
     btnReady();
     $('#results-wrapper').removeAttr("hidden");
     $('#results').html('<h6 style="color:#ccc"><center>&bull;</center><h6>');
     $('#results').append('<h3>'+json.title+'</h3>');
+    calendar["summary"] = json.title;
 
     if (json.enddate!='' || json.endtime!='') {
-        renderComponents(json.startdate, json.starttime, "Start date", "Start time");
-        renderComponents(json.enddate, json.endtime, "End date", "End time");
+        renderComponents(json.startdate, json.starttime, "Start date", "Start time", 1);
+        renderComponents(json.enddate, json.endtime, "End date", "End time", 1);
     }
     else {
-        renderComponents(json.startdate, json.starttime, "Date", "Time");
+        renderComponents(json.startdate, json.starttime, "Date", "Time", 0);
     }
-
-
     if (json.location != undefined && json.location != '') {
-        renderLocation(json.location);
+        calendar["location"] = renderLocation(json.location);
     }
-
 }
 
 function renderLocation(location) {
@@ -69,7 +91,7 @@ function renderLocation(location) {
     $('#results').append('<div class=\"col-sm-12 text-center    \"><iframe src=\"https://www.google.com/maps/embed/v1/search?key=AIzaSyApwYjqfr7GJKSgO1Jdcf8kjV4N8WM2Y48&q='+encodeURI(location)+'\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" allowfullscreen></iframe></div>');
 }
 
-function renderComponents(jsondate, jsontime, strdate, strtime) {
+function renderComponents(jsondate, jsontime, strdate, strtime, isHaveEnd) {
     var date;
     // DATE
     if (jsondate == '') {
@@ -85,11 +107,28 @@ function renderComponents(jsondate, jsontime, strdate, strtime) {
     $('#results').append('<div class=\"col-sm-8\">'+date+'</div>');
 
     // TIME
+    var time;
     if (jsontime != '') {
-        var time = timeProcess(jsontime);
+        time = timeProcess(jsontime);
         $('#results').append('<div class=\"col-sm-4\"><b>'+strtime+'</b></div>');
         $('#results').append('<div class=\"col-sm-8\">'+time+'</div>');
+        var dateTime = date+timeFormatForCalendar(time);
+        if (strdate=="Date" || strdate=="Start date") {
+            calendar["start"] = {"dateTime": dateTime};
+        }
+        if (strdate=="End date" || isHaveEnd==0) {
+            calendar["end"] = {"dateTime": dateTime};   
+        }
     }
+    else {
+        if (strdate=="Date" || strdate=="Start date") {
+            calendar["start"] = {"date": date};
+        }
+        if (strdate=="End date" || isHaveEnd==0)  {
+            calendar["end"] = {"date": date};   
+        }
+    }
+    return 
 }
 
 function timeProcess(time) {
@@ -167,6 +206,11 @@ function dayFormat(day) {
     if(mm<10) {
         mm='0'+mm
     }
-    day = mm+'/'+dd+'/'+yyyy;
+    day = yyyy+'-'+mm+'-'+dd;
     return day;
+}
+
+function timeFormatForCalendar(time) {
+    var ans = "T"+time+":00Z";
+    return ans;
 }
