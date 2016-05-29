@@ -70,7 +70,9 @@ app.post('/', function (req, res) {
         }
       })
       if (result.time) { result.time.substring(1) }
-      res.status(200).send(JSON.stringify(result))
+      console.log(tokens)
+      console.log(result)
+      res.status(200).json(JSON.stringify(result))
     }
   })
 })
