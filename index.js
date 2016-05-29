@@ -6,7 +6,7 @@ const exec = require('child_process').exec
 const app = express()
 const port = process.env.PORT || 3000
 const corenlp = {
-  'host': 'localhost:9000',
+  'host': 'http://158.108.238.141:9000',
   'properties': {
     'tokenize.whitespace': 'true',
     'annotators': 'ner', // tokenize, ssplit, pos, lemma, ner, depparse, coref, natlog, openie
@@ -38,8 +38,8 @@ app.post('/', function (req, res) {
           normalizedNER: token.normalizedNER
         }
       })
-      let titleTokens = []
-      let dateTimeTokens = []
+      var titleTokens = []
+      var dateTimeTokens = []
       tokens.forEach(function (token, index) {
         if (isNERDateTime(token)) {
           if (index === 0 || isNERDateTime(tokens[index - 1])) {
