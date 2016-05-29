@@ -48,30 +48,46 @@ function renderResult(data) {
     $('#results').html('<h6 style="color:#ccc"><center>&bull;</center><h6>');
     $('#results').append('<h3>'+json.title+'</h3>');
 
-    var today = getToday();
-    var date;
-
-    // DATE
-    if (json.date == undefined) {
-        json.date = today;
-        date = json.date;
-        date = dateProcess(json.time);
+    if (json.enddate!='' || json.endtime!='') {
+        renderComponents(json.startdate, json.starttime, "Start date", "Start time");
+        renderComponents(json.enddate, json.endtime, "End date", "End time");
     }
     else {
-        date = dateProcess(json.date);   
+        renderComponents(json.startdate, json.starttime, "Date", "Time");
     }
-    $('#results').append('<div class=\"col-sm-4\"><b>Date</b></div>');
+
+
+    if (json.location != undefined && json.location != '') {
+        renderLocation(json.location);
+    }
+
+}
+
+function renderLocation(location) {
+    $('#results').append('<div class=\"col-sm-4\"><b>Location</b></div>');
+    $('#results').append('<div class=\"col-sm-8\">'+location+'</div>');
+    $('#results').append('<div class=\"col-sm-12 text-center\"><iframe src=\"https://www.google.com/maps/embed/v1/search?key=AIzaSyApwYjqfr7GJKSgO1Jdcf8kjV4N8WM2Y48&q='+encodeURI(location)+'\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" allowfullscreen></iframe></div>');
+}
+
+function renderComponents(jsondate, jsontime, strdate, strtime) {
+    var date;
+    // DATE
+    if (jsondate == '') {
+        date = getToday();
+        date = dateProcess(jsontime);
+    }
+    else {
+        date = dateProcess(jsondate);   
+    }
+    $('#results').append('<div class=\"col-sm-4\"><b>'+strdate+'</b></div>');
     $('#results').append('<div class=\"col-sm-8\">'+date+'</div>');
 
     // TIME
-    if (json.time != undefined) {
-        var time = timeProcess(json.time);
-        $('#results').append('<div class=\"col-sm-4\"><b>Time</b></div>');
+    if (jsontime != '') {
+        var time = timeProcess(jsontime);
+        $('#results').append('<div class=\"col-sm-4\"><b>'+strtime+'</b></div>');
         $('#results').append('<div class=\"col-sm-8\">'+time+'</div>');
     }
-
-
-
 }
 
 function timeProcess(time) {
@@ -87,9 +103,19 @@ function timeProcess(time) {
 function dateProcess(date) {
     var dayOffsetDate = dayOffset(date);
     var weekOffsetDate = weekOffset(date);
+    var weekendDate = weekendOffset(date);
     if (dayOffsetDate != date) return dayOffsetDate;
     else if (weekOffsetDate != date) return weekOffsetDate;
+    else if (weekendDate != date) return weekendDate;
     else return date;
+}
+
+function weekendOffset(date) {
+    var offsetTest = new RegExp("XXXX-WE");
+    if (offsetTest.test(date)) {
+        return "Weekend";
+    }
+    return date;
 }
 
 function dayOffset(date) {
