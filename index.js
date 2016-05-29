@@ -69,7 +69,7 @@ app.post('/', function (req, res) {
           result.date = dateTime
         }
       })
-      result.time = result.time.substring(1)
+      if (result.time) { result.time.substring(1) }
       res.status(200).send(JSON.stringify(result))
     }
   })
