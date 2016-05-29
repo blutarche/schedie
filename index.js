@@ -41,6 +41,7 @@ app.post('/', function (req, res) {
       let titleTokens = []
       let startDateTimeTokens = []
       let endDateTimeTokens = []
+      let locationTokens = []
       tokens.forEach(function (token, index) {
         if (isNERDateTime(token)) {
           if (index === 0 || isNERDateTime(tokens[index - 1]) || tokens[index - 1].pos.includes('NN')) {
@@ -52,6 +53,11 @@ app.post('/', function (req, res) {
           } else {
             titleTokens.push(token)
           }
+        } else if (token.ner === 'LOCATION' || token.ner === 'ORGANIZATION') {
+          if (tokens[index - 1].pos === 'IN') {
+            titleTokens.pop()
+          }
+          locationTokens.push(token)
         } else {
           titleTokens.push(token)
         }
@@ -61,9 +67,11 @@ app.post('/', function (req, res) {
         startdate: "",
         enddate: "",
         starttime: "",
-        endtime: ""
+        endtime: "",
+        location: ""
       }
       result.title = titleTokens.map((token) => token.word).join(" ")
+      result.location = locationTokens.map((token) => token.word).join(" ")
       const startDateTime = separateDateTime(startDateTimeTokens)
       const endDateTime = separateDateTime(endDateTimeTokens)
       result.startdate = startDateTime.date
@@ -81,7 +89,7 @@ app.post('/', function (req, res) {
       console.log(endDateTimeTokens)
       console.log("Result")
       console.log(result)
-      
+
       res.status(200).json(JSON.stringify(result))
     }
   })
