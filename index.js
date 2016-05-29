@@ -6,7 +6,7 @@ const exec = require('child_process').exec
 const app = express()
 const port = process.env.PORT || 3000
 const corenlp = {
-  'host': 'corenlp.run',
+  'host': 'http://158.108.238.141:9000',
   'properties': {
     "tokenize.whitespace": "true",
     "annotators": "ner",
