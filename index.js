@@ -42,14 +42,18 @@ app.post('/', function (req, res) {
       let startDateTimeTokens = []
       let endDateTimeTokens = []
       let locationTokens = []
+      let isStartTime = true
       tokens.forEach(function (token, index) {
         if (isNERDateTime(token)) {
           locationState = false
-          if (index === 0 || isNERDateTime(tokens[index - 1]) || tokens[index - 1].pos.includes('NN')) {
+          if (index === 0 || (isNERDateTime(tokens[index - 1]) && isStartTime) || tokens[index - 1].pos.includes('NN')) {
+            isStartTime = true
             startDateTimeTokens.push(token)
           } else if (tokens[index - 1].pos === 'IN') {
+            isStartTime = true
             startDateTimeTokens.push(titleTokens.pop(), token)
-          } else if (tokens[index - 1].pos === ':' || tokens[index - 1].pos === 'TO') {
+          } else if (tokens[index - 1].pos === ':' || tokens[index - 1].pos === 'TO' || (isNERDateTime(tokens[index - 1]) && !isStartTime)) {
+            isStartTime = false
             endDateTimeTokens.push(titleTokens.pop(), token)
           } else {
             titleTokens.push(token)

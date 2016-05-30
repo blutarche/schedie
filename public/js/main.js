@@ -74,8 +74,9 @@ function renderResult(data) {
     calendar["summary"] = json.title;
 
     if (json.enddate!='' || json.endtime!='') {
-        renderComponents(json.startdate, json.starttime, "Start date", "Start time", 1);
-        renderComponents(json.enddate, json.endtime, "End date", "End time", 1);
+      if (json.enddate === '') { json.enddate = json.startdate }
+      renderComponents(json.startdate, json.starttime, "Start date", "Start time", 1);
+      renderComponents(json.enddate, json.endtime, "End date", "End time", 1);
     }
     else {
         renderComponents(json.startdate, json.starttime, "Date", "Time", 0);
